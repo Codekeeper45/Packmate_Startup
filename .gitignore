@@ -10,6 +10,14 @@ build/
 .output/
 backend/dist/
 
+# Android build outputs (large generated files)
+android/.gradle/
+android/build/
+android/app/build/
+android/app/.cxx/
+*.apk
+*.aab
+
 # Environment variables
 .env
 .env.local

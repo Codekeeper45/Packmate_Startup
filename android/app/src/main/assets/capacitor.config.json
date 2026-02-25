@@ -1,0 +1,9 @@
+{
+	"appId": "dev.packmate.app",
+	"appName": "Packmate",
+	"webDir": "dist",
+	"android": {},
+	"server": {
+		"androidScheme": "https"
+	}
+}
