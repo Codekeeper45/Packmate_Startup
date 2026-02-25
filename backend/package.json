@@ -5,8 +5,11 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:stub": "tsx watch src/server.stub.ts",
     "build": "tsc",
+    "build:stub": "tsc --outDir dist && echo Stub build done",
     "start": "node dist/server.js",
+    "start:stub": "node dist/server.stub.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
