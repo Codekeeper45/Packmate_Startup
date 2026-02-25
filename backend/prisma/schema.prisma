@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+//  User
+// ─────────────────────────────────────────────
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  googleId  String?  @unique
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trips     Trip[]
+  templates PackingList[] @relation("UserTemplates")
+}
+
+// ─────────────────────────────────────────────
+//  Trip
+// ─────────────────────────────────────────────
+model Trip {
+  id             String   @id @default(cuid())
+  userId         String
+  location       String
+  startDate      DateTime
+  endDate        DateTime
+  accommodation  Accommodation
+  activityLevel  ActivityLevel
+  weatherContext Json?    // cached weather forecast at generation time
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  packingList PackingList?
+
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────────
+//  PackingList
+// ─────────────────────────────────────────────
+model PackingList {
+  id         String   @id @default(cuid())
+  tripId     String?  @unique
+  userId     String?
+  name       String?  // only used when isTemplate = true
+  isTemplate Boolean  @default(false)
+  // { [category: string]: PackingItem[] }
+  content    Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  trip Trip? @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User? @relation("UserTemplates", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isTemplate])
+}
+
+// ─────────────────────────────────────────────
+//  Enums
+// ─────────────────────────────────────────────
+enum Accommodation {
+  hotel
+  hostel
+  airbnb
+  tent
+  other
+}
+
+enum ActivityLevel {
+  light
+  moderate
+  intense
+}
