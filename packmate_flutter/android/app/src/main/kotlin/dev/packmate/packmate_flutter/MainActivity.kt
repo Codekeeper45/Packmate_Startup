@@ -1,0 +1,5 @@
+package dev.packmate.packmate_flutter
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
